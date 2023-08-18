@@ -8,9 +8,8 @@ import java.io.IOException;
 
 public class TestServer {
 
-    //WE NEED TO PARSE COOKIES
-    //KILL SESSIONS AFTER X TIME - GARBAGE COLLECT
-    //ONLY USE BYTES - NO STRINGS...
+    //FIX HEADER READING
+    //CHANGE STATUS CODES TO BYTE FORM
 
     public static void main(String[] args){
         WebServer web = new WebServer(8080);
