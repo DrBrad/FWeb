@@ -18,6 +18,12 @@ public class Test {
 
     @GetMapping(location = "/test")
     public void onResponse(GetEvent event)throws IOException {
+        if(event.getSession().contains("HELLO")){
+            event.getOutputStream().write(((String) event.getSession().get("HELLO")).getBytes());
+        }else{
+            event.getSession().add("HELLO", "NEW");
+        }
+
         System.out.println("TEST FILE");
         event.getOutputStream().write("TEST FILE BLA BLA".getBytes());
     }

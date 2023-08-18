@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -18,6 +19,7 @@ public class WebServer {
 
     private int port;
     private Executor executor;
+    private Timer timer;
     private ServerSocket server;
     private Socket socket;
 
@@ -39,6 +41,9 @@ public class WebServer {
     }
 
     public void start()throws IOException {
+        timer = new Timer(true);
+        timer.schedule(new GarbageCollector(this), 0, 3600000);
+
         server = new ServerSocket(port);
         System.out.println("Server started on port: "+server.getLocalPort());
 
@@ -78,5 +83,8 @@ public class WebServer {
 
     public void stop()throws IOException {
         server.close();
+        timer.cancel();
+        timer.cancel();
+        timer.purge();
     }
 }

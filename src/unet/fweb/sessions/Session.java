@@ -7,10 +7,12 @@ public class Session {
 
     private UUID uuid;
     private HashMap<String, Object> v;
+    protected long lastSeen;
 
     public Session(UUID uuid){
         this.uuid = uuid;
         v = new HashMap<>();
+        lastSeen = System.currentTimeMillis();
     }
 
     public UUID getUUID(){
@@ -35,6 +37,10 @@ public class Session {
 
     public void clear(){
         v.clear();
+    }
+
+    public long getLastSeen(){
+        return lastSeen;
     }
 
     @Override
