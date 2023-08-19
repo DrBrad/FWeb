@@ -12,6 +12,10 @@ public class TestServer {
     //CHANGE STATUS CODES TO BYTE FORM
     //ALLOW FOR DOMAIN SYSTEM AND USE APPLICATION - SO WE CAN ALLOW FOR MULTIPLE SOCKETS EASILY...
     //JUST MAKE SYSTEM TO SEND HEADERS...
+    //PLANNED SYSTEM
+    // <$ VARIABLE $>
+    // <$ CODE $>
+    //CACHE EVERYTHING BUT CODE AND VARS FOR EASY USE
 
     public static void main(String[] args){
         WebServer web = new WebServer(8080);
