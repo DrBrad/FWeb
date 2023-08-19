@@ -50,7 +50,11 @@ public class WebSocket {
 
                 for(Cookie cookie : requestCookies){
                     if(Arrays.equals(cookie.getByteName(), SESSION_BYTES)){
-                        session = server.sessionFactory.get(UUID.fromString(cookie.getVariable()));
+                        UUID uuid = UUID.fromString(cookie.getVariable());
+                        if(server.sessionFactory.contains(uuid)){
+                            session = server.sessionFactory.get(UUID.fromString(cookie.getVariable()));
+                            session.setSeen();
+                        }
                         break;
                     }
                 }

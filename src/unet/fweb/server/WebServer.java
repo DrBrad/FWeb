@@ -15,6 +15,8 @@ import java.util.Timer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import static unet.fweb.sessions.SessionFactory.SESSION_EVICTION_TIME;
+
 public class WebServer {
 
     private int port;
@@ -42,7 +44,7 @@ public class WebServer {
 
     public void start()throws IOException {
         timer = new Timer(true);
-        timer.schedule(new GarbageCollector(this), 0, 3600000);
+        timer.schedule(new GarbageCollector(this), 0, SESSION_EVICTION_TIME);
 
         server = new ServerSocket(port);
         System.out.println("Server started on port: "+server.getLocalPort());

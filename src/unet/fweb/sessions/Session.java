@@ -39,6 +39,10 @@ public class Session {
         v.clear();
     }
 
+    public void setSeen(){
+        lastSeen = System.currentTimeMillis();
+    }
+
     public long getLastSeen(){
         return lastSeen;
     }

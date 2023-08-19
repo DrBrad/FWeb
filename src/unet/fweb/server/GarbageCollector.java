@@ -12,6 +12,8 @@ public class GarbageCollector extends TimerTask {
 
     @Override
     public void run(){
+        int size = server.sessionFactory.size();
         server.sessionFactory.evictOldSessions();
+        System.out.println("[ GC ] : EVICTED ("+(size-server.sessionFactory.size())+") SESSIONS");
     }
 }

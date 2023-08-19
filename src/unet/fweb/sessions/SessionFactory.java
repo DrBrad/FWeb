@@ -4,6 +4,7 @@ import java.util.*;
 
 public class SessionFactory {
 
+    public static final int SESSION_EVICTION_TIME = 1800000;
     public static final byte[] SESSION_BYTES = new byte[]{ 'F', 'S', 'S', 'I', 'D' };
 
     private SessionMap<UUID, Session> s;
@@ -46,9 +47,8 @@ public class SessionFactory {
         public void evictOldSessions(){
             long t = System.currentTimeMillis();
             for(Object k : keySet()){
-                Session s = get(k);
-                if(get(k).lastSeen+1800000 < t){
-                    remove(s);
+                if(get(k).lastSeen+SESSION_EVICTION_TIME < t){
+                    remove(k);
                 }
             }
         }
