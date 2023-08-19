@@ -8,8 +8,10 @@ import java.io.IOException;
 
 public class TestServer {
 
-    //FIX HEADER READING
+    //FIX HEADER READING - READ AS IT COMES...
     //CHANGE STATUS CODES TO BYTE FORM
+    //ALLOW FOR DOMAIN SYSTEM AND USE APPLICATION - SO WE CAN ALLOW FOR MULTIPLE SOCKETS EASILY...
+    //JUST MAKE SYSTEM TO SEND HEADERS...
 
     public static void main(String[] args){
         WebServer web = new WebServer(8080);

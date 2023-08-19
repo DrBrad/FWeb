@@ -25,7 +25,7 @@ public class ResponseHeaders extends Headers {
         out.write(0x20);
         out.write(statusCode.getValue());
         out.write(0x20);
-        out.write(statusCode.getDescription().getBytes());
+        out.write(statusCode.getByteDescription());
         out.write(0x0D);
         out.write(0x0A);
 
