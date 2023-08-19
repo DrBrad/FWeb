@@ -81,6 +81,7 @@ public class WebSocket {
             switch(requestHeaders.getRequestType()){
                 case POST:
                     if(server.postMethods.containsKey(k)){
+                        responseHeaders.setStatusCode(StatusCode.OK);
                         Method m = server.postMethods.get(k);
                         Object c = m.getDeclaringClass().getConstructor().newInstance();
                         m.setAccessible(true);
@@ -90,6 +91,7 @@ public class WebSocket {
 
                 case GET:
                     if(server.getMethods.containsKey(k)){
+                        responseHeaders.setStatusCode(StatusCode.OK);
                         Method m = server.getMethods.get(k);
                         Object c = m.getDeclaringClass().getConstructor().newInstance();
                         m.setAccessible(true);

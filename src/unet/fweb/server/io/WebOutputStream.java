@@ -66,8 +66,8 @@ public class WebOutputStream extends OutputStream {
         }
         web.responseHeaders.write(out);
 
-        flush();
-        close();
+        out.flush();
+        out.close();
     }
 
     public void writeHeaders()throws IOException {
@@ -79,7 +79,7 @@ public class WebOutputStream extends OutputStream {
             web.responseHeaders.add(SET_COOKIE_BYTES, Cookie.searialize(web.responseCookies));
         }
         web.responseHeaders.write(out);
-        flush();
+        out.flush();
 
         sentHeaders = true;
     }
