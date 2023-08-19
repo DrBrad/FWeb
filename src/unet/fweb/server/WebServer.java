@@ -1,5 +1,6 @@
 package unet.fweb.server;
 
+import unet.fweb.server.handlers.MethodKey;
 import unet.fweb.server.inet.Controller;
 import unet.fweb.server.inet.GetMapping;
 import unet.fweb.server.inet.PostMapping;
@@ -27,7 +28,7 @@ public class WebServer {
 
     protected SessionFactory sessionFactory;
 
-    protected Map<String, Method> getMethods, postMethods;
+    protected Map<MethodKey, Method> getMethods, postMethods;
 
     public WebServer(){
         this(0);
@@ -66,19 +67,22 @@ public class WebServer {
     }
 
     public void registerController(Class<?> c){
+        //CHANGE KEY TO CUSTOM CLASS USING LOCATION AND HOST...
         if(!c.isAnnotationPresent(Controller.class)){
             throw new IllegalArgumentException("Class doesn't a valid controller");
         }
 
+        String host = c.getAnnotation(Controller.class).host();
+
         for(Method m : c.getDeclaredMethods()){
             if(m.isAnnotationPresent(GetMapping.class)){
-                getMethods.put(m.getAnnotation(GetMapping.class).location(), m);
+                getMethods.put(new MethodKey(host, m.getAnnotation(GetMapping.class).location()), m);
             }
         }
 
         for(Method m : c.getDeclaredMethods()){
             if(m.isAnnotationPresent(PostMapping.class)){
-                postMethods.put(m.getAnnotation(PostMapping.class).location(), m);
+                postMethods.put(new MethodKey(host, m.getAnnotation(PostMapping.class).location()), m);
             }
         }
     }

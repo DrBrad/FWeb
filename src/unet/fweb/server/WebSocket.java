@@ -3,11 +3,15 @@ package unet.fweb.server;
 import unet.fweb.cookies.Cookie;
 import unet.fweb.headers.RequestHeaders;
 import unet.fweb.headers.ResponseHeaders;
+import unet.fweb.headers.StatusCode;
+import unet.fweb.server.events.GetEvent;
+import unet.fweb.server.events.PostEvent;
+import unet.fweb.server.handlers.MethodKey;
+import unet.fweb.server.io.WebOutputStream;
 import unet.fweb.sessions.Session;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -16,20 +20,20 @@ import java.util.List;
 import java.util.UUID;
 
 import static unet.fweb.cookies.Cookie.COOKIE_BYTES;
-import static unet.fweb.cookies.Cookie.SET_COOKIE_BYTES;
+import static unet.fweb.headers.RequestHeaders.HOST_KEY;
 import static unet.fweb.sessions.SessionFactory.SESSION_BYTES;
 
 public class WebSocket {
 
     private WebServer server;
-    protected Socket socket;
-    protected InputStream in;
-    protected OutputStream out;
+    private Socket socket;
+    public InputStream in;
+    public WebOutputStream out;
 
-    protected RequestHeaders requestHeaders;
-    protected ResponseHeaders responseHeaders;
-    protected List<Cookie> requestCookies, responseCookies;
-    protected Session session;
+    public RequestHeaders requestHeaders;
+    public ResponseHeaders responseHeaders;
+    public List<Cookie> requestCookies, responseCookies;
+    public Session session;
 
     public WebSocket(WebServer server, Socket socket){
         this.server = server;
@@ -40,7 +44,7 @@ public class WebSocket {
     public void init(){
         try{
             in = socket.getInputStream();
-            out = socket.getOutputStream();
+            out = new WebOutputStream(this, socket.getOutputStream());
 
             requestHeaders = new RequestHeaders();
             requestHeaders.read(in);
@@ -65,36 +69,37 @@ public class WebSocket {
                 responseCookies.add(new Cookie(SESSION_BYTES, session.getUUID().toString().getBytes()));
             }
 
-            Object c = null;
-
-            if(server.postMethods.containsKey(requestHeaders.getLocation())){
-                Method m = server.postMethods.get(requestHeaders.getLocation());
-                c = m.getDeclaringClass().getConstructor().newInstance();
-                m.setAccessible(true);
-                m.invoke(c, new PostEvent(this));
-            }
-
             responseHeaders = new ResponseHeaders();
-            responseHeaders.add("Content-Type", "text/html");
-            if(!responseCookies.isEmpty()){
-                responseHeaders.add(SET_COOKIE_BYTES, Cookie.searialize(responseCookies));
+
+            if(!requestHeaders.contains(HOST_KEY)){
+                out.writeError(StatusCode.BAD_REQUEST);
+                return;
             }
-            responseHeaders.write(out);
 
-            //SENT HEADERS SEND RESPONSE...
+            MethodKey k = new MethodKey(requestHeaders.get(HOST_KEY), requestHeaders.getLocation());
 
-            if(server.getMethods.containsKey(requestHeaders.getLocation())){
-                Method m = server.getMethods.get(requestHeaders.getLocation());
+            switch(requestHeaders.getRequestType()){
+                case POST:
+                    if(server.postMethods.containsKey(k)){
+                        Method m = server.postMethods.get(k);
+                        Object c = m.getDeclaringClass().getConstructor().newInstance();
+                        m.setAccessible(true);
+                        m.invoke(c, new PostEvent(this));
+                    }
+                    break;
 
-                if(c != null && m.getDeclaringClass().equals(c.getClass())){
-                    m.setAccessible(true);
-                    m.invoke(c, new GetEvent(this));
+                case GET:
+                    if(server.getMethods.containsKey(k)){
+                        Method m = server.getMethods.get(k);
+                        Object c = m.getDeclaringClass().getConstructor().newInstance();
+                        m.setAccessible(true);
+                        m.invoke(c, new GetEvent(this));
+                    }
+                    break;
+            }
 
-                }else{
-                    c = m.getDeclaringClass().getConstructor().newInstance();
-                    m.setAccessible(true);
-                    m.invoke(c, new GetEvent(this));
-                }
+            if(!out.hasSentHeaders()){
+                out.writeHeaders();
             }
 
             in.close();

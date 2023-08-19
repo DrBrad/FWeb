@@ -1,4 +1,6 @@
-package unet.fweb.server;
+package unet.fweb.server.events;
+
+import unet.fweb.server.WebSocket;
 
 import java.io.InputStream;
 

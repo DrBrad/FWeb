@@ -5,4 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Controller {
+
+    String host() default "localhost";
 }

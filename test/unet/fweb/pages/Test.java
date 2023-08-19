@@ -1,12 +1,12 @@
 package unet.fweb.pages;
 
-import unet.fweb.server.GetEvent;
+import unet.fweb.server.events.GetEvent;
 import unet.fweb.server.inet.Controller;
 import unet.fweb.server.inet.GetMapping;
 
 import java.io.IOException;
 
-@Controller
+@Controller(host = "127.0.0.1:8080")
 public class Test {
 
     /*

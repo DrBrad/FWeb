@@ -10,6 +10,7 @@ public class RequestHeaders extends Headers {
     //=========================================
 
     public static final int HTTP_HEADER_SIZE = 8190;
+    public static final byte[] HOST_KEY = new byte[]{ 'H', 'o', 's', 't' };
 
     private RequestType requestType;
     private byte[] location;

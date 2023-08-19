@@ -15,6 +15,11 @@ public class BytesKey {
     }
 
     @Override
+    public int hashCode(){
+        return Arrays.hashCode(b);
+    }
+
+    @Override
     public boolean equals(Object o){
         if(this == o){
             return true;
@@ -26,10 +31,5 @@ public class BytesKey {
 
         BytesKey bytesKey = (BytesKey) o;
         return Arrays.equals(b, bytesKey.b);
-    }
-
-    @Override
-    public int hashCode(){
-        return Arrays.hashCode(b);
     }
 }

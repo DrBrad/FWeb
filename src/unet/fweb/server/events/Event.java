@@ -1,10 +1,14 @@
-package unet.fweb.server;
+package unet.fweb.server.events;
 
 import unet.fweb.cookies.Cookie;
 import unet.fweb.headers.RequestHeaders;
 import unet.fweb.headers.ResponseHeaders;
+import unet.fweb.server.WebSocket;
+import unet.fweb.server.io.WebOutputStream;
 import unet.fweb.sessions.Session;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 public class Event {
@@ -31,9 +35,9 @@ public class Event {
         return web.session;
     }
 
-    public int getPort(){
-        return web.socket.getPort();
-    }
+    //public int getPort(){
+    //    return web.socket.getPort();
+    //}
 
     public RequestHeaders getRequestHeaders(){
         return web.requestHeaders;
@@ -41,5 +45,9 @@ public class Event {
 
     public ResponseHeaders getResponseHeaders(){
         return web.responseHeaders;
+    }
+
+    public WebOutputStream getOutputStream(){
+        return web.out;
     }
 }
