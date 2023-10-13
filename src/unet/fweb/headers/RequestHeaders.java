@@ -102,6 +102,7 @@ public class RequestHeaders extends Headers {
                     requestType = RequestType.getByValue(n);
                     t = 0;
                 }
+
                 s = i+1;
                 continue;
             }
