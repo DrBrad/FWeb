@@ -76,6 +76,9 @@ public class WebSocket {
                 return;
             }
 
+            //PARSE GET AND POST AT THIS POINT...
+            System.err.println(requestHeaders.getLocation());
+
             MethodKey k = new MethodKey(requestHeaders.get(HOST_KEY), requestHeaders.getLocation());
 
             switch(requestHeaders.getRequestType()){

@@ -28,6 +28,70 @@ public class RequestHeaders extends Headers {
         for(; i < l; i++){
             if(b[i] == 0x20){
                 if(t == 0){
+                    //byte[] n = new byte[i-s];
+                    //System.arraycopy(b, s, n, 0, i-s);
+
+                    //SPLIT THE LOCATION FOR GET...
+
+
+                    byte[] k = null;
+                    int z = 0, x = s;
+
+                    for(int j = s; j < i; j++){
+                        switch(z){
+                            case 0:
+                                if(b[j] == '?'){
+                                    z++;
+                                    x = j+1;
+                                }
+                                break;
+
+                            case 1:
+                                if(b[j] == '='){
+                                    k = new byte[j-x];
+                                    System.arraycopy(b, x, k, 0, j-x);
+                                    z++;
+                                    x = j+1;
+
+                                }else if(b[j] == '&'){
+                                    //SAVE KEY NO VALUE
+                                    k = new byte[j-x];
+                                    System.arraycopy(b, x, k, 0, j-x);
+                                    System.out.println("KEY: "+new String(k));
+                                    x = j+1;
+                                }
+                                break;
+
+                            case 2:
+                                if(b[j] == '&'){
+                                    byte[] v = new byte[j-x];
+                                    System.arraycopy(b, x, v, 0, j-x);
+                                    z--;
+                                    System.out.println("KEY: "+new String(k)+" VAL: "+new String(v));
+                                    x = j+1;
+
+                                    //ADD KEY VALUE PAIR
+                                }
+                                break;
+                        }
+                    }
+
+                    switch(z){
+                        case 1:
+                            k = new byte[i-x];
+                            System.arraycopy(b, x, k, 0, i-x);
+                            System.out.println("KEY 1: "+new String(k));
+                            break;
+
+                        case 2:
+                            byte[] v = new byte[i-x];
+                            System.arraycopy(b, x, v, 0, i-x);
+                            System.out.println("KEY 1: "+new String(k)+" VAL: "+new String(v));
+                            break;
+                    }
+
+                    //IF CASE 2 SAVE KEY PAIR  IF CASE 1 SAVE KEY
+
                     byte[] n = new byte[i-s];
                     System.arraycopy(b, s, n, 0, i-s);
                     location = n;
