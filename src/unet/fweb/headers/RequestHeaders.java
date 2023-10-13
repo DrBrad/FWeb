@@ -33,7 +33,6 @@ public class RequestHeaders extends Headers {
 
                     //SPLIT THE LOCATION FOR GET...
 
-
                     byte[] k = null;
                     int z = 0, x = s;
 
@@ -41,6 +40,8 @@ public class RequestHeaders extends Headers {
                         switch(z){
                             case 0:
                                 if(b[j] == '?'){
+                                    location = new byte[j-s];
+                                    System.arraycopy(b, s, location, 0, j-s);
                                     z++;
                                     x = j+1;
                                 }
@@ -77,6 +78,11 @@ public class RequestHeaders extends Headers {
                     }
 
                     switch(z){
+                        case 0:
+                            location = new byte[i-s];
+                            System.arraycopy(b, s, location, 0, i-s);
+                            break;
+
                         case 1:
                             k = new byte[i-x];
                             System.arraycopy(b, x, k, 0, i-x);
@@ -89,12 +95,6 @@ public class RequestHeaders extends Headers {
                             System.out.println("KEY 1: "+new String(k)+" VAL: "+new String(v));
                             break;
                     }
-
-                    //IF CASE 2 SAVE KEY PAIR  IF CASE 1 SAVE KEY
-
-                    byte[] n = new byte[i-s];
-                    System.arraycopy(b, s, n, 0, i-s);
-                    location = n;
 
                 }else{
                     byte[] n = new byte[i-s];
