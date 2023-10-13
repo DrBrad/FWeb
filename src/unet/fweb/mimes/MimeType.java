@@ -3,8 +3,8 @@ package unet.fweb.mimes;
 public enum MimeType {
 
     PNG("png", new byte[]{ 'i', 'm', 'a', 'g', 'e', '/', 'p', 'n', 'g' }),
-    JPG("jpg", new byte[]{ 'i', 'm', 'a', 'g', 'e', '/', 'j', 'p', 'g' }),
-    JPEG("jpeg", new byte[]{ 'i', 'm', 'a', 'g', 'e', '/', 'j', 'p', 'g' }),
+    JPG("jpg", new byte[]{ 'i', 'm', 'a', 'g', 'e', '/', 'j', 'p', 'e', 'g' }),
+    JPEG("jpeg", new byte[]{ 'i', 'm', 'a', 'g', 'e', '/', 'j', 'p', 'e', 'g' }),
     MP4("mp4", new byte[]{ 'v', 'i', 'd', 'e', 'o', '/', 'm', 'p', '4' });
 
     private String ext;

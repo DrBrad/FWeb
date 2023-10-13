@@ -12,23 +12,20 @@ import static unet.fweb.headers.ResponseHeaders.CONTENT_TYPE;
 @Controller(host = "127.0.0.1:8080")
 public class Test {
 
-    @GetMapping(location = "/video")
+    @GetMapping(location = "/image")
     public void onResponse(GetEvent event)throws IOException {
-        /*
-        if(event.getSession().contains("HELLO")){
-            event.getOutputStream().write(((String) event.getSession().get("HELLO")).getBytes());
-        }else{
-            event.getSession().add("HELLO", "NEW");
-        }
+        File f = new File("/home/brad/Downloads/MV5BYjFlMWU1NWEtZTRkZi00YTBlLThjYzUtZmZiYTUxNDFiYjdkXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg");
 
-        System.out.println("TEST FILE");
-        event.getOutputStream().write("TEST FILE BLA BLA".getBytes());
-        */
-
-        File f = new File("file.mp4");
-
-        event.getResponseHeaders().add(CONTENT_TYPE, MimeType.MP4.byteValue());
+        event.getResponseHeaders().add(CONTENT_TYPE, MimeType.JPEG.byteValue());
         InputStream in = new FileInputStream(f);
-        event.getOutputStream().write(in.read());
+
+        OutputStream out = event.getOutputStream();
+
+        byte[] buf = new byte[4096];
+        int len;
+        while((len = in.read(buf)) > -1){
+            out.write(buf, 0, len);
+        }
+        out.flush();
     }
 }
