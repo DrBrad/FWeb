@@ -17,11 +17,17 @@ public class Test {
     public void onResponse(GetEvent event)throws IOException {
         if(!event.getRequestGET().contains("id")){
             event.getResponseHeaders().setStatusCode(StatusCode.NOT_FOUND);
-            event.getOutputStream().write("FILE DOESN'T EXIST".getBytes());
+            event.getOutputStream().write("NO ID SET".getBytes());
             return;
         }
 
         File f = new File("/home/brad/Downloads/"+event.getRequestGET().get("id"));
+
+        if(!f.exists()){
+            event.getResponseHeaders().setStatusCode(StatusCode.NOT_FOUND);
+            event.getOutputStream().write("FILE DOESN'T EXIST".getBytes());
+            return;
+        }
 
         event.getResponseHeaders().add(CONTENT_TYPE, MimeType.JPEG.byteValue());
         InputStream in = new FileInputStream(f);
