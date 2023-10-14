@@ -82,6 +82,14 @@ public class WebSocket {
             //PARSE GET AND POST AT THIS POINT...
             System.err.println(requestHeaders.get(HOST_KEY));
 
+            //WE CAN COMBINE THE REQUEST WITH THE HOST IE - localhost/LOCATION - TO DEFINE THAT
+            //IF localhost IS SET - SPECIFIC HOST TO TRUE
+
+            //THEN AGAIN WE CAN DO A MAP SYSTEM AS SUCH
+            // DOMAIN > REQUESTS
+            // NULL > REQUESTS
+            //
+
             MethodKey k = new MethodKey(requestHeaders.get(HOST_KEY), requestHeaders.getLocation());
 
             switch(requestHeaders.getRequestType()){
