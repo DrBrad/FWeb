@@ -80,7 +80,7 @@ public class WebSocket {
             }
 
             //PARSE GET AND POST AT THIS POINT...
-            System.err.println(requestHeaders.getLocation());
+            System.err.println(requestHeaders.get(HOST_KEY));
 
             MethodKey k = new MethodKey(requestHeaders.get(HOST_KEY), requestHeaders.getLocation());
 
