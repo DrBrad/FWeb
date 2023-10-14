@@ -1,6 +1,7 @@
 package unet.fweb.server.events;
 
 import unet.fweb.cookies.Cookie;
+import unet.fweb.headers.GetRequests;
 import unet.fweb.headers.RequestHeaders;
 import unet.fweb.headers.ResponseHeaders;
 import unet.fweb.server.WebSocket;
@@ -45,6 +46,10 @@ public class Event {
 
     public ResponseHeaders getResponseHeaders(){
         return web.responseHeaders;
+    }
+
+    public GetRequests getRequestGET(){
+        return web.requestGet;
     }
 
     public WebOutputStream getOutputStream(){

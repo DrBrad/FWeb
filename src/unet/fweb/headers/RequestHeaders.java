@@ -1,5 +1,7 @@
 package unet.fweb.headers;
 
+import unet.fweb.server.WebSocket;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,9 +14,15 @@ public class RequestHeaders extends Headers {
     public static final int HTTP_HEADER_SIZE = 8190;
     public static final byte[] HOST_KEY = new byte[]{ 'H', 'o', 's', 't' };
 
+    private GetRequests requestGet;
+
     private RequestType requestType;
     private byte[] location;
     private Protocol protocol;
+
+    public RequestHeaders(GetRequests requestGet){
+        this.requestGet = requestGet;
+    }
 
     public void read(InputStream in)throws IOException {
         byte[] b = new byte[HTTP_HEADER_SIZE];
@@ -58,7 +66,7 @@ public class RequestHeaders extends Headers {
                                     //SAVE KEY NO VALUE
                                     k = new byte[j-x];
                                     System.arraycopy(b, x, k, 0, j-x);
-                                    System.out.println("KEY: "+new String(k));
+                                    requestGet.add(k, null);
                                     x = j+1;
                                 }
                                 break;
@@ -67,8 +75,8 @@ public class RequestHeaders extends Headers {
                                 if(b[j] == '&'){
                                     byte[] v = new byte[j-x];
                                     System.arraycopy(b, x, v, 0, j-x);
+                                    requestGet.add(k, v);
                                     z--;
-                                    System.out.println("KEY: "+new String(k)+" VAL: "+new String(v));
                                     x = j+1;
 
                                     //ADD KEY VALUE PAIR
@@ -86,13 +94,13 @@ public class RequestHeaders extends Headers {
                         case 1:
                             k = new byte[i-x];
                             System.arraycopy(b, x, k, 0, i-x);
-                            System.out.println("KEY 1: "+new String(k));
+                            requestGet.add(k, null);
                             break;
 
                         case 2:
                             byte[] v = new byte[i-x];
                             System.arraycopy(b, x, v, 0, i-x);
-                            System.out.println("KEY 1: "+new String(k)+" VAL: "+new String(v));
+                            requestGet.add(k, v);
                             break;
                     }
 

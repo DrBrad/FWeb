@@ -1,5 +1,6 @@
 package unet.fweb.pages;
 
+import unet.fweb.headers.StatusCode;
 import unet.fweb.mimes.MimeType;
 import unet.fweb.server.events.GetEvent;
 import unet.fweb.server.inet.Controller;
@@ -14,7 +15,13 @@ public class Test {
 
     @GetMapping(location = "/image")
     public void onResponse(GetEvent event)throws IOException {
-        File f = new File("/home/brad/Downloads/MV5BYjFlMWU1NWEtZTRkZi00YTBlLThjYzUtZmZiYTUxNDFiYjdkXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg");
+        if(!event.getRequestGET().contains("id")){
+            event.getResponseHeaders().setStatusCode(StatusCode.NOT_FOUND);
+            event.getOutputStream().write("FILE DOESN'T EXIST".getBytes());
+            return;
+        }
+
+        File f = new File("/home/brad/Downloads/"+event.getRequestGET().get("id"));
 
         event.getResponseHeaders().add(CONTENT_TYPE, MimeType.JPEG.byteValue());
         InputStream in = new FileInputStream(f);

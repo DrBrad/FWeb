@@ -1,6 +1,7 @@
 package unet.fweb.server;
 
 import unet.fweb.cookies.Cookie;
+import unet.fweb.headers.GetRequests;
 import unet.fweb.headers.RequestHeaders;
 import unet.fweb.headers.ResponseHeaders;
 import unet.fweb.headers.StatusCode;
@@ -32,6 +33,7 @@ public class WebSocket {
 
     public RequestHeaders requestHeaders;
     public ResponseHeaders responseHeaders;
+    public GetRequests requestGet;
     public List<Cookie> requestCookies, responseCookies;
     public Session session;
 
@@ -46,7 +48,8 @@ public class WebSocket {
             in = socket.getInputStream();
             out = new WebOutputStream(this, socket.getOutputStream());
 
-            requestHeaders = new RequestHeaders();
+            requestGet = new GetRequests();
+            requestHeaders = new RequestHeaders(requestGet);
             requestHeaders.read(in);
 
             if(requestHeaders.contains(COOKIE_BYTES)){
