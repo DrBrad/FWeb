@@ -88,7 +88,7 @@ public class WebSocket {
             //THEN AGAIN WE CAN DO A MAP SYSTEM AS SUCH
             // DOMAIN > REQUESTS
             // NULL > REQUESTS
-            //
+            // MODIFY METHODS
 
             MethodKey k = new MethodKey(requestHeaders.get(HOST_KEY), requestHeaders.getLocation());
 
