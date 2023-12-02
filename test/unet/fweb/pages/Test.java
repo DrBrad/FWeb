@@ -3,7 +3,6 @@ package unet.fweb.pages;
 import unet.fweb.headers.StatusCode;
 import unet.fweb.mimes.MimeType;
 import unet.fweb.server.events.GetEvent;
-import unet.fweb.server.inet.Controller;
 import unet.fweb.server.inet.Mapping;
 
 import java.io.*;
