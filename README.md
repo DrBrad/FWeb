@@ -11,6 +11,7 @@ Supports
 | HEAD  | YES  |
 | HTTP  | YES  |
 | HTTPS  | NOT YET  |
+| REGEX-LOCATIONS  | NOT YET  |
 
 Usage
 -----
