@@ -37,11 +37,11 @@ public class WebServer {
         this.port = port;
         executor = Executors.newFixedThreadPool(10);
         methods = new HashMap();
-        //postMethods = new HashMap<>();
+
         try{
             host = InetAddress.getLocalHost().getHostAddress();
         }catch(UnknownHostException e){
-            e.printStackTrace();
+            System.err.println("Server failed to get default host address using: localhost instead");
             host = "localhost";
         }
 
@@ -51,8 +51,10 @@ public class WebServer {
     public void start()throws IOException {
         timer = new Timer(true);
         timer.schedule(new GarbageCollector(this), SESSION_EVICTION_TIME, SESSION_EVICTION_TIME);
+        System.out.println("Garbage Collector started at interval: "+SESSION_EVICTION_TIME);
 
         server = new ServerSocket(port);
+        System.out.println("Server started on port: "+server.getLocalPort());
 
         while((socket = server.accept()) != null){
             executor.execute(new Runnable(){
@@ -80,6 +82,7 @@ public class WebServer {
         for(Method m : c.getDeclaredMethods()){
             if(m.isAnnotationPresent(Mapping.class)){
                 methods.put(new MethodKey(host, m.getAnnotation(Mapping.class).location(), m.getAnnotation(Mapping.class).type()), m);
+                System.out.println("Server registered method: "+m.getName()+" on host: "+host);
             }
         }
     }
