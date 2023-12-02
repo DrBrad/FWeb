@@ -4,16 +4,15 @@ import unet.fweb.headers.StatusCode;
 import unet.fweb.mimes.MimeType;
 import unet.fweb.server.events.GetEvent;
 import unet.fweb.server.inet.Controller;
-import unet.fweb.server.inet.GetMapping;
+import unet.fweb.server.inet.Mapping;
 
 import java.io.*;
 
 import static unet.fweb.headers.ResponseHeaders.CONTENT_TYPE;
 
-@Controller(host = "127.0.0.1:8080")
 public class Test {
 
-    @GetMapping(location = "/image")
+    @Mapping(location = "/image")
     public void onResponse(GetEvent event)throws IOException {
         if(!event.getRequestGET().contains("id")){
             event.getResponseHeaders().setStatusCode(StatusCode.NOT_FOUND);

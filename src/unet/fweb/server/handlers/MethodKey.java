@@ -1,12 +1,16 @@
 package unet.fweb.server.handlers;
 
+import unet.fweb.headers.RequestType;
+
 public class MethodKey {
 
     private String host, location;
+    private RequestType type;
 
-    public MethodKey(String host, String location){
+    public MethodKey(String host, String location, RequestType type){
         this.host = host;
         this.location = location;
+        this.type = type;
     }
 
     public String getHost(){
@@ -15,6 +19,10 @@ public class MethodKey {
 
     public String getLocation(){
         return location;
+    }
+
+    public RequestType getType(){
+        return type;
     }
 
     @Override

@@ -6,7 +6,9 @@ import unet.fweb.headers.RequestHeaders;
 import unet.fweb.headers.ResponseHeaders;
 import unet.fweb.headers.StatusCode;
 import unet.fweb.server.events.GetEvent;
+import unet.fweb.server.events.HeadEvent;
 import unet.fweb.server.events.PostEvent;
+import unet.fweb.server.events.PutEvent;
 import unet.fweb.server.handlers.MethodKey;
 import unet.fweb.server.io.WebOutputStream;
 import unet.fweb.sessions.Session;
@@ -90,28 +92,11 @@ public class WebSocket {
             // NULL > REQUESTS
             // MODIFY METHODS
 
-            MethodKey k = new MethodKey(requestHeaders.get(HOST_KEY), requestHeaders.getLocation());
 
-            switch(requestHeaders.getRequestType()){
-                case POST:
-                    if(server.postMethods.containsKey(k)){
-                        responseHeaders.setStatusCode(StatusCode.OK);
-                        Method m = server.postMethods.get(k);
-                        Object c = m.getDeclaringClass().getConstructor().newInstance();
-                        m.setAccessible(true);
-                        m.invoke(c, new PostEvent(this));
-                    }
-                    break;
-
-                case GET:
-                    if(server.getMethods.containsKey(k)){
-                        responseHeaders.setStatusCode(StatusCode.OK);
-                        Method m = server.getMethods.get(k);
-                        Object c = m.getDeclaringClass().getConstructor().newInstance();
-                        m.setAccessible(true);
-                        m.invoke(c, new GetEvent(this));
-                    }
-                    break;
+            if(!handleMethod(new MethodKey(requestHeaders.get(HOST_KEY), requestHeaders.getLocation(), requestHeaders.getRequestType()))){
+                if(!handleMethod(new MethodKey(server.host, requestHeaders.getLocation(), requestHeaders.getRequestType()))){
+                    responseHeaders.setStatusCode(StatusCode.NOT_FOUND);
+                }
             }
 
             if(!out.hasSentHeaders()){
@@ -126,5 +111,33 @@ public class WebSocket {
         }catch(ReflectiveOperationException | IOException e){
             e.printStackTrace();
         }
+    }
+
+    private boolean handleMethod(MethodKey mk)throws ReflectiveOperationException {
+        if(server.methods.containsKey(mk)){
+            responseHeaders.setStatusCode(StatusCode.OK);
+            Method m = server.methods.get(mk);
+            Object c = m.getDeclaringClass().getConstructor().newInstance();
+            m.setAccessible(true);
+            switch(mk.getType()){
+                case GET:
+                    m.invoke(c, new GetEvent(this));
+                    return true;
+
+                case POST:
+                    m.invoke(c, new PostEvent(this));
+                    return true;
+
+                case HEAD:
+                    m.invoke(c, new HeadEvent(this));
+                    return true;
+
+                case PUT:
+                    m.invoke(c, new PutEvent(this));
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
