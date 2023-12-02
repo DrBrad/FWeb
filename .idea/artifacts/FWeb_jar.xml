@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FWeb:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FWeb_jar</output-path>
+    <root id="archive" name="FWeb.jar">
+      <element id="module-output" name="FWeb" />
+    </root>
+  </artifact>
+</component>
